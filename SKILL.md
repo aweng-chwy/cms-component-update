@@ -37,6 +37,7 @@ Use this skill to carry a CMS authoring change through to CMS components in `cms
 - Stories live near components as `*.stories.tsx`.
 - Tests live in `src/__tests__` and may include snapshots.
 - Shared helpers and typings live under `shared/*`.
+- Related repos: `content-a` is the runtime delivery source of truth; `content-authoring-ui`, `content-authoring-backend`, and `content-authoring-c` provide authoring/backend context only.
 
 ## References
 

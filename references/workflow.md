@@ -27,6 +27,14 @@
 - Open questions:
 ```
 
+## Repo Relationship Map
+
+- `cms-template-library`: primary repo for CMS components. Update packages, typings, SCSS, stories, tests, mocks, and universal routing here.
+- `content-a`: runtime delivery API and source of truth for CMS component payloads. Prove render data shape from this repo, a sample payload, fixture, endpoint output, generated type, or linked content-a PR before coding when shape is unclear.
+- `content-authoring-ui`: authoring forms, dialogs, previews, and generated client types. Use as context for what authors configure, not as proof of runtime delivery shape.
+- `content-authoring-backend`: authoring schema, resolvers, validation, persistence, and generated artifacts. Use as context for stored fields and widget/item contracts.
+- `content-authoring-c`: APIs that `content-authoring-backend` requests. Inspect this repo when backend behavior or field availability depends on an upstream authoring API contract, response shape, or service behavior.
+
 ## Decision Table
 
 | Finding | Path |
