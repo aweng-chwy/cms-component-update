@@ -11,7 +11,10 @@
 ## Agent workflow
 
 - Workflow: `$cms-component-update`
+- Active scope:
+- Deferred / out of scope:
 - content-a API contract / sample payload:
+- Provisional data-shape assumptions:
 - Figma/design source:
 - Affected package/component:
 - Linked content-authoring-ui PR:
@@ -24,6 +27,14 @@
 - Rendering behavior:
 - Fallback behavior for existing content:
 - Accessibility / analytics impact:
+
+## Responsive / interaction behavior
+
+- Small:
+- Medium:
+- Large:
+- Overlay components:
+- Compact surface height:
 
 ## How has this been tested?
 
@@ -41,10 +52,15 @@
 
 - [ ] CMS records were not created, updated, scheduled, or published.
 - [ ] content-a API contract, sample payload, fixture, or linked content-a PR was reviewed when available.
+- [ ] Provisional contract assumptions are documented when no content-a contract exists.
 - [ ] Authoring UI/backend changes are linked or explicitly not needed.
 - [ ] Existing content without the new field remains supported.
 - [ ] Tests or stories cover the new rendering path.
 - [ ] Tests or stories cover fallback behavior when practical.
+- [ ] Responsive overlay behavior matches the active scope.
+- [ ] Compact surface height was checked when applicable.
+- [ ] Legacy component paths are untouched when requested.
+- [ ] Required branch name, draft state, title, and skill-created wording are honored.
 - [ ] Unrelated package refactors and dependency changes are excluded.
 
 ## PR Readiness

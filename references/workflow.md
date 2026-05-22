@@ -6,10 +6,12 @@
 - content-a API contract when available, such as schema docs, sample JSON payloads, fixture updates, endpoint output, or linked content-a PRs.
 - Figma/design source when available.
 - Affected widget type and likely `cms-template-library` package.
+- Active scope, priority level, explicit non-goals, and any follow-up prompt corrections.
 - Linked UI/backend PRs or local branches.
 - Expected runtime rendering behavior and acceptance criteria.
+- Responsive behavior by viewport, including overlay/component requirements.
 - Fallback behavior when new data is missing from existing content.
-- Base branch and JIRA ticket.
+- Requested branch, PR title/body requirements, base branch, and JIRA ticket.
 
 ## Intake Output
 
@@ -19,13 +21,30 @@
 - content-a API contract:
 - Figma/design source:
 - Affected package/component:
+- Active scope:
+- Deferred / out of scope:
 - New or changed data contract:
+- Provisional data-shape assumptions:
 - Expected rendering behavior:
 - Backward compatibility behavior:
 - Responsive states:
+- Overlay / interaction matrix:
+- Branch / PR instructions:
 - Linked UI/backend PRs:
 - Open questions:
 ```
+
+## Scope Reconciliation Gate
+
+Before each implementation pass and again before PR prep, restate the latest active scope from the user and design sources:
+
+- Current P0 requirements and acceptance criteria.
+- Explicit non-goals, deferred P1s, and superseded earlier instructions.
+- Supported data count and variants, such as single vs multiple messages.
+- Required interaction components, such as Chirp modal, bottom sheet, drawer, or inline expansion.
+- Requested branch name, PR title, draft/open state, and required PR wording.
+
+If a follow-up narrows the scope, remove already-added behavior when practical or isolate it behind non-rendered fixtures only when removal is riskier. Do not keep future-ready behavior just because it was implemented earlier.
 
 ## Repo Relationship Map
 
@@ -49,7 +68,11 @@
 | Build or runtime fails with a Yarn PnP missing dependency | Add the runtime import to the package's own `dependencies` and verify the built package can load. |
 | content-a API contract is available | Use it as the runtime data source of truth before editing component props/rendering. |
 | content-a API contract is unavailable but sample payloads exist | Use samples/fixtures as provisional evidence and document assumptions. |
-| Delivery data shape is unclear | Stop and ask for the content-a API contract, sample payload, fixture, or linked content-a PR before implementation. |
+| User explicitly authorizes an assumed contract | Create the narrowest provisional type/fixture, document assumptions in stories/tests/PR, and keep it easy to replace when content-a lands. |
+| Delivery data shape is unclear and assumptions are not authorized | Stop and ask for the content-a API contract, sample payload, fixture, or linked content-a PR before implementation. |
+| User says to ignore P1 or future behavior | Remove it from active scope and do not implement it, even if it appears in design notes. |
+| Prompt says not to touch an old component | Add a new package or isolated entry point, then verify the legacy path has no diff before committing. |
+| Specific Chirp components are required for interaction | Use the required Chirp component, declare the owning package dependency, and add tests/stories proving it renders for the intended state. |
 
 ## New Package Checklist
 
@@ -79,6 +102,27 @@ For visual or tile/card work, record the Figma measurements before changing CSS:
 
 Use this matrix to implement CSS. Do not infer medium or large layouts from existing CSS if Figma provides explicit viewport nodes.
 
+## Responsive Overlay Matrix
+
+For modals, bottom sheets, drawers, accordions, or expanded details, record the behavior before editing:
+
+| Viewport | Breakpoint source | Required component | Expected behavior | Test/story |
+| --- | --- | --- | --- | --- |
+| small | design/token/code value | e.g. `KibSheet` | opens from bottom | story/test name |
+| medium | design/token/code value | e.g. `KibModal` | centered dialog | story/test name |
+| large | design/token/code value | e.g. `KibModal` | centered dialog | story/test name |
+
+Prefer intent-based names for this logic, such as `DetailsOverlayViewport` or `shouldUseBottomSheet`, rather than naming it after the whole banner/component when it only controls an interaction. Add focused tests that assert the intended component for each distinct responsive behavior.
+
+## Compact Surface Height Guard
+
+For banners, nav bars, promo strips, headers, or other compact global surfaces:
+
+- Treat the simplest existing variant, such as text-only, as the closed-state height baseline unless the requirement says otherwise.
+- Do not let optional icon, CTA, or expandable-detail support increase the closed-state height.
+- Compare responsive closed-state height in stories, screenshots, or DOM assertions when practical.
+- Keep expanded content height changes inside the required overlay/interaction component.
+
 ## Dependency And PnP Checks
 
 - After adding a package or import, verify every runtime import is declared in that package's `dependencies`, not only hoisted or available elsewhere in the repo.
@@ -100,10 +144,12 @@ Use this matrix to implement CSS. Do not infer medium or large layouts from exis
    - Figma props that are design-only and should not become runtime API
 3. Implement rendering:
    - update types first
+   - keep active scope and deferred requirements visible while editing
    - keep missing-field fallback stable
    - add option handling with explicit defaults
    - update styles only for the changed visual behavior
    - update package exports or universal mapping only when required
+   - choose names based on the behavior being controlled, not the broad component name
 4. Update examples:
    - add a story for the new field/option
    - use realistic CMS/content-a payloads in stories and mocks
@@ -114,11 +160,16 @@ Use this matrix to implement CSS. Do not infer medium or large layouts from exis
    - prefer package-level tests when possible
    - run lint/build when shared types, exports, or styles changed
    - run a package load/PnP check after adding new runtime dependencies
+   - verify legacy component paths have no diff when the user asked not to touch them
+   - verify responsive interaction behavior for every row in the overlay matrix
+   - verify compact closed-state height for banner/header-like surfaces when applicable
    - record commands and results in the PR body
 6. Prepare PR:
    - use `references/pr-template.md`
-   - include Figma/design source, content-a API contract evidence, linked authoring PRs, contract summary, test evidence, and backward compatibility notes
-   - show title/body before commit, push, or PR creation
+   - include Figma/design source, content-a API contract evidence or provisional assumptions, linked authoring PRs, active scope, deferred items, contract summary, test evidence, and backward compatibility notes
+   - honor requested branch name, draft state, title, and required wording such as "created by the skill"
+   - confirm only scoped files are staged; leave unrelated dirty files unstaged
+   - show title/body before commit, push, or PR creation unless the user explicitly requested direct PR creation
 
 ## Suggested Commands
 

@@ -1,6 +1,6 @@
 ---
 name: cms-component-update
-description: Use when CMS authoring changes must be reflected in CMS components that render content-a API data, including new widget fields, enum/dropdown options, rendering variants, typography/media behavior, Storybook stories, package tests, content-a API contract mapping, and coordinated PRs after using $figma-to-cms-authoring or similar CMS authoring work; ask for the content-a API contract when available and do not use for CMS record mutation, scheduling, Bynder uploads, or authoring-only changes that do not affect rendered output.
+description: Use when CMS authoring changes must be reflected in CMS components that render content-a API data, including new widget fields, enum/dropdown options, rendering variants, responsive/overlay behavior, typography/media behavior, Storybook stories, package tests, content-a API contract mapping, and coordinated PRs after using $figma-to-cms-authoring or similar CMS authoring work; reconcile active scope from follow-up prompts, ask for the content-a API contract when available, and do not use for CMS record mutation, scheduling, Bynder uploads, or authoring-only changes that do not affect rendered output.
 ---
 
 # CMS Component Update
@@ -10,11 +10,11 @@ Use this skill to carry a CMS authoring change through to CMS components in `cms
 ## Quick Start
 
 1. Read `references/workflow.md` before editing.
-2. Intake the authoring change summary, content-a API contract when available, Figma/design source, affected widget/component, UI/backend PR links, and expected website behavior.
+2. Intake the authoring change summary, content-a API contract when available, Figma/design source, affected widget/component, active scope/non-goals, UI/backend PR links, and expected website behavior.
 3. Locate the matching `cms-template-library/packages/<package>` component, typings, stories, tests, and styles.
-4. Map the content-a API contract to component props/data shape before editing.
+4. Map the content-a API contract to component props/data shape before editing, or document a provisional data-shape assumption only when the user explicitly authorizes it.
 5. For a new widget package, complete the package/story/universal/dependency checklist in `references/workflow.md`.
-6. Implement the smallest rendering change, preserving backward compatibility for existing content.
+6. Reconcile the latest active scope before each implementation pass; implement only the smallest rendering change, preserving backward compatibility for existing content.
 7. Add or update stories and focused tests for the new field, option, or rendering state.
 8. Run the package-level test/build checks that match the touched surface.
 9. Fill `references/pr-template.md`, show the PR title/body, then commit/push/open a draft PR only after confirmation.
@@ -23,9 +23,11 @@ Use this skill to carry a CMS authoring change through to CMS components in `cms
 
 - Do not mutate CMS records, schedule content, publish content, or upload assets.
 - Do not change `content-authoring-ui` or `content-authoring-backend` unless the user explicitly expands this task beyond the component update.
-- Stop if the content-a API contract or runtime data shape is ambiguous and cannot be proven from API docs, sample payloads, code, generated types, fixtures, or live content-a examples.
+- Stop if the content-a API contract or runtime data shape is ambiguous and cannot be proven from API docs, sample payloads, code, generated types, fixtures, or live content-a examples, unless the user explicitly asks for a provisional assumption.
+- Treat the newest user follow-up as the active scope; drop superseded requirements, and do not implement deferred P1 or future behavior.
 - Preserve rendering behavior for existing content records where the new field is missing.
 - Keep unrelated package refactors, style rewrites, dependency changes, and generated snapshot churn out of scope.
+- If asked not to touch an old component, verify the legacy path has no diff before committing.
 - Declare every runtime import in the package's own `dependencies`; Yarn PnP missing-dependency errors are package bugs, not test noise.
 - Cross-link the authoring UI/backend PRs when this template PR depends on them, but do not treat those PRs as the runtime API contract.
 

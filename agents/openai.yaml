@@ -1,4 +1,4 @@
 interface:
   display_name: "CMS Component Update"
-  short_description: "Update CMS components for new fields."
-  default_prompt: "Use $cms-component-update to update the CMS component for these authoring changes."
+  short_description: "Update CMS components for new fields and rendering behavior."
+  default_prompt: "Use $cms-component-update to update the CMS component for these authoring changes. Reconcile active scope, map the content-a contract or documented assumptions, and include tests for responsive rendering behavior."
